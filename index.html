@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>شات بوت الملعب 🤖</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f8f9fa;
+      padding: 20px;
+      direction: rtl;
+    }
+    h2 {
+      color: #2c3e50;
+    }
+    #chat-box {
+      border: 1px solid #ccc;
+      background-color: #fff;
+      padding: 15px;
+      height: 300px;
+      overflow-y: auto;
+      margin-bottom: 10px;
+    }
+    #chat-box p {
+      margin: 5px 0;
+    }
+    #user-input {
+      width: 70%;
+      padding: 10px;
+      font-size: 16px;
+    }
+    button {
+      padding: 10px 15px;
+      font-size: 16px;
+      background-color: #3498db;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #2980b9;
+    }
+  </style>
+</head>
+<body>
+  <h2>مرحبًا بك في شات بوت الملعب 🤖</h2>
+  <div id="chat-box"></div>
+  <input type="text" id="user-input" placeholder="اكتب سؤالك هنا...">
+  <button onclick="sendMessage()">إرسال</button>
+
+  <script>
+    async function sendMessage() {
+      const input = document.getElementById("user-input");
+      const message = input.value.trim();
+      if (!message) return;
+
+      document.getElementById("chat-box").innerHTML += `<p><strong>أنت:</strong> ${message}</p>`;
+      input.value = "";
+
+      const response = await fetch("/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: message })
+      });
+
+      const data = await response.json();
+      document.getElementById("chat-box").innerHTML += `<p><strong>البوت:</strong> ${data.response}</p>`;
+      document.getElementById("chat-box").scrollTop = document.getElementById("chat-box").scrollHeight;
+    }
+  </script>
+</body>
+</html>
